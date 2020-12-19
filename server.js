@@ -2,14 +2,17 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http);    
 var mongoose = require('mongoose');
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-const dbUrl = 'mongodb+srv://user:user@clustersandbox-3pmzm.mongodb.net/test?retryWrites=true&w=majority';
+mongoose.set('useUnifiedTopology', true);
+mongoose.Promise = Promise;
+
+const dbUrl = 'mongodb+srv://mongohero:mlab123@clustersandbox.3pmzm.mongodb.net/<dbname>?retryWrites=true&w=majority';
 
 const Message = mongoose.model('Message', {
     name: String,
@@ -22,16 +25,35 @@ app.get('/messages', (req, res) => {
     })
 })
 
-app.post('/messages', (req, res) => {
-    let message = new Message(req.body);
+app.post('/messages', async (req, res) => {
 
-    message.save((err) => {
-        if (err)
-            sendStatus(500);
+    try {
 
-        io.emit('message', req.body);
+        let message = new Message(req.body);
+
+        var savedMessage = await message.save()
+        
+        var censored = await Message.findOne({message:'badword'});    
+    
+        if(censored){
+            console.log('Censored word found := ', censored);
+            await Message.remove({_id:censored.id})
+        }
+        else
+            io.emit('message', req.body);
+        
         res.sendStatus(200);
-    })
+
+    }
+    catch(error){
+        res.sendStatus(500);
+        return console.error(error);
+    }
+    finally{
+        console.log('message post called');
+    }
+    
+    
 
 })
 
