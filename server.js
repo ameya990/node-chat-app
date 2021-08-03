@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 mongoose.set('useUnifiedTopology', true);
 mongoose.Promise = Promise;
 
-const dbUrl = 'mongodb+srv://mongohero:mlab123@clustersandbox.3pmzm.mongodb.net/<dbname>?retryWrites=true&w=majority';
+const dbUrl = 'mongodb+srv://mongohero:mlab123@clustersandbox.3pmzm.mongodb.net/learning-node?retryWrites=true&w=majority';
 
 const Message = mongoose.model('Message', {
     name: String,
