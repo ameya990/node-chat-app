@@ -4,10 +4,22 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);    
 var mongoose = require('mongoose');
+var cors = require('cors');
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
+
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
 
 mongoose.set('useUnifiedTopology', true);
 mongoose.Promise = Promise;
@@ -72,6 +84,6 @@ mongoose.connect(dbUrl,{ useNewUrlParser: true }, (err) => {
     console.log('mongo db connection', err);
 })
 
-const server = http.listen(3000, () => {
-    console.log("Server is listening on ", server.address().port)
+const server = http.listen(9000, () => {
+    console.log("Server is listening on ", server.address().port);
 });

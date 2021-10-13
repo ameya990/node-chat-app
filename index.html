@@ -20,7 +20,7 @@
         </div>
 
         <div id="messages">
-
+            
         </div>
 </div>
 
@@ -34,7 +34,7 @@
         getMessages();
     })
 
-    socket.on('message', addMessage)
+    socket.on('message', addMessage);
 
     function addMessage(message) {
         $("#messages").append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
@@ -42,12 +42,12 @@
     }
 
     function getMessages(){
-        $.get('http://localhost:3000/messages', (data) => {
+        $.get('http://localhost:9000/messages', (data) => {
             data.forEach(addMessage);
         })
     }
 
     function postMessage(message){
-        $.post('http://localhost:3000/messages', message);
+        $.post('http://localhost:9000/messages', message);
     }
 </script>
