@@ -17,7 +17,7 @@
     "lodash": "^4.17.20",
     "mongoose": "^5.7.8",
     "nodemon": "^2.0.12",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "socket.io-client": "^4.2.0"
   },
   "devDependencies": {
